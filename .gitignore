@@ -444,6 +444,10 @@ deps
 build
 install
 
+# Log files
+log/*.log
+log/*.txt
+
 # Tools
 tools/ImageCropper/**/*.png
 

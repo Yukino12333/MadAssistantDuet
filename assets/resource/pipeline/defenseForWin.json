@@ -76,10 +76,22 @@
         "action": "LongPressKey",
         "key": 83,
         "duration": 6000,
-        "interrupt": ["autoBattle_for_win"],
-        "timeout": 180000,
+        "next": [
+            "战斗循环检测_for_win"
+        ]
+    },
+    "战斗循环检测_for_win": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "LongPressWithTimeoutDetection",
+        "custom_action_param": {
+            "check_interval": 1000,
+            "total_timeout": 180000,
+            "target_node": "again_for_win",
+            "interrupt_node": "autoBattle_for_win"
+        },
         "on_error": ["exitBattle_for_win"],
-        "next": ["again_for_win"]
+        "next": []
     },
     "autoBattle_for_win":{
         "recognition": "DirectHit",
@@ -91,7 +103,8 @@
         "again_for_win": {
         "recognition": "OCR",
         "expected": "再次进行",
-       
+        "timeout": 1000,
+        "on_error": ["exitBattle_for_win"],
         "action": "Click",
         "next": [
             "startChallenge_for_win"
@@ -100,7 +113,6 @@
     "startChallenge_for_win": {
         "recognition": "OCR",
         "expected": "开始挑战",
-        
         "action": "Click",
         "post_delay": 10000,
         "next": [

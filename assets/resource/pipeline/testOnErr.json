@@ -1,0 +1,18 @@
+{
+    "startTest":{
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["againForTest"],
+        "timeout": 8000,
+        "interrupt": ["autoBattle"],
+        "on_error": ["exitBattle"]
+    },
+    "againForTest":{
+        "recognition": "OCR",
+        "expected": ["再次挑战"],
+        "timeout": 10000,
+        "on_error": ["exitBattle"],
+        "interrupt": ["autoBattle"],
+        "next": ["startChallenge"]
+    }
+}

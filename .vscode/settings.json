@@ -38,5 +38,7 @@
     "[markdown]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-    }
+    },
+    "python.defaultInterpreterPath": "D:\\Work\\Anaconda\\python.exe",
+    "python.analysis.extraPaths": []
 }
