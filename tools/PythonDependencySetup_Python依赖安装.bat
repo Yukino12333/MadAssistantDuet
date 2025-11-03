@@ -47,10 +47,10 @@ echo %GREEN%Detected Python version:%RESET%
 python --version
 echo.
 
-:: 检查 requirements.txt 是否存在
-if not exist "requirements.txt" (
-    echo %RED%错误: 未找到 requirements.txt 文件%RESET%
-    echo %RED%Error: requirements.txt not found%RESET%
+:: 检查 requirements_win.txt 是否存在
+if not exist "requirements_win.txt" (
+    echo %RED%错误: 未找到 requirements_win.txt 文件%RESET%
+    echo %RED%Error: requirements_win.txt not found%RESET%
     set "ErrorOccurred=1"
     goto :end
 )
@@ -69,10 +69,10 @@ if %errorlevel% neq 0 (
 )
 echo.
 
-:: 安装 requirements.txt 中的依赖
-echo %CYAN%正在安装 requirements.txt 中的依赖...%RESET%
-echo %CYAN%Installing dependencies from requirements.txt...%RESET%
-python -m pip install -r requirements.txt
+:: 安装 requirements_win.txt 中的依赖
+echo %CYAN%正在安装 requirements_win.txt 中的依赖...%RESET%
+echo %CYAN%Installing dependencies from requirements_win.txt...%RESET%
+python -m pip install -r requirements_win.txt
 if %errorlevel% neq 0 (
     echo %RED%错误: 依赖安装失败%RESET%
     echo %RED%Error: Dependency installation failed%RESET%

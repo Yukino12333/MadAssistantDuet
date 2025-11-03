@@ -1,0 +1,2 @@
+maafw
+pywin32
