@@ -28,9 +28,102 @@
     },
     "task": [
         {
+            "name":"闪避键设置（默认为右键）",
+            "entry":"SetDodgeKey",
+            "doc":"设置闪避键，默认为右键，务必勾选",
+            "option": ["闪避键设置"]
+        },
+        {
             "name": "65级mod（扼守）",
             "entry": "exitBattle_for_win",
-            "doc":"进入指定副本后，即可启动，会先自动退出一次复位"
+            "doc": "进入指定副本后，即可启动，会先自动退出一次复位"
         }
-    ]
+    ],
+    "option": {
+        "闪避键设置": {
+            "cases": [
+                {
+                    "name": "Shift键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 16
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Ctrl键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 17
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Alt键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 18
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "空格键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 32
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "数字5键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 53
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "鼠标右键",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 2
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "鼠标侧键1",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 5
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "鼠标侧键2",
+                    "pipeline_override": {
+                        "SetDodgeKey": {
+                            "custom_action_param": {
+                                "dodge_key": 6
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "鼠标右键"
+        }
+    }
 }

@@ -1,12 +1,62 @@
-from maa.agent.agent_server import AgentServer
+﻿from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 from maa.context import Context
 import time
 import logging
 import json
 
+# 导入 PostMessage 相关的自定义动作
+from postmessage.actions import RunWithShift, LongPressKey, PressMultipleKeys
+
 # 获取日志记录器
 logger = logging.getLogger(__name__)
+
+
+@AgentServer.custom_action("SetDodgeKey")
+class SetDodgeKey(CustomAction):
+    """
+    设置闪避键配置
+    用于保存用户选择的闪避键到全局配置中
+    """
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> bool:
+        try:
+            # 解析参数
+            if isinstance(argv.custom_action_param, str):
+                params = json.loads(argv.custom_action_param)
+            elif isinstance(argv.custom_action_param, dict):
+                params = argv.custom_action_param
+            else:
+                logger.error(f"[SetDodgeKey] 参数类型错误: {type(argv.custom_action_param)}")
+                return False
+            
+            # 获取闪避键虚拟键码(现在直接是 int)
+            dodge_key_vk = params.get("dodge_key", 0x10)  # 默认 Shift = 0x10
+            
+            # 导入 main 模块以访问全局配置
+            import main
+            
+            # 保存到全局配置
+            main.GAME_CONFIG["dodge_key"] = dodge_key_vk
+            
+            logger.info(f"[SetDodgeKey] [OK] 闪避键已设置为: VK=0x{dodge_key_vk:02X} ({dodge_key_vk})")
+            logger.info(f"[SetDodgeKey] 当前配置: {main.GAME_CONFIG}")
+            
+            # 强制刷新截图缓存，避免后续节点使用旧图
+            logger.info(f"[SetDodgeKey] 刷新截图缓存...")
+            screencap_job = context.tasker.controller.post_screencap()
+            screencap_job.wait()
+            logger.info(f"[SetDodgeKey] [OK] 截图缓存已更新")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"[SetDodgeKey] 发生异常: {e}", exc_info=True)
+            return False
 
 
 @AgentServer.custom_action("my_action_111")
@@ -88,7 +138,7 @@ class LongPressWithTimeoutDetection(CustomAction):
                 
                 # 检查识别结果是否有效（box 不为 None 且宽高大于 0）
                 if reco_result and reco_result.box and reco_result.box.w > 0 and reco_result.box.h > 0:
-                    logger.info(f"[LongPressWithTimeoutDetection] ✓ 检测到 '{target_node}'")
+                    logger.info(f"[LongPressWithTimeoutDetection] [OK] 检测到 '{target_node}'")
                     logger.info(f"  识别框: x={reco_result.box.x}, y={reco_result.box.y}, w={reco_result.box.w}, h={reco_result.box.h}")
                     logger.info(f"  识别算法: {reco_result.algorithm}")
                     logger.info(f"  总循环次数: {loop_count}, 总用时: {int(elapsed)}ms")
@@ -98,30 +148,30 @@ class LongPressWithTimeoutDetection(CustomAction):
                 else:
                     # 详细记录未识别的原因
                     if not reco_result:
-                        logger.info(f"[LongPressWithTimeoutDetection] ✗ 未检测到 '{target_node}' (reco_result 为 None)")
+                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (reco_result 为 None)")
                     elif not reco_result.box:
-                        logger.info(f"[LongPressWithTimeoutDetection] ✗ 未检测到 '{target_node}' (box 为 None)")
+                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (box 为 None)")
                     else:
-                        logger.info(f"[LongPressWithTimeoutDetection] ✗ 未检测到 '{target_node}' (box 无效: w={reco_result.box.w}, h={reco_result.box.h})")
+                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (box 无效: w={reco_result.box.w}, h={reco_result.box.h})")
                     
-                    logger.info(f"[LongPressWithTimeoutDetection] → 执行 interrupt '{interrupt_node}'")
+                    logger.info(f"[LongPressWithTimeoutDetection] -> 执行 interrupt '{interrupt_node}'")
                     
                     # 直接执行 interrupt 节点的动作（按 E 键）
                     try:
                         # 获取 interrupt_node 的配置并执行
                         click_job = context.tasker.controller.post_click_key(69)  # E 键
                         click_job.wait()
-                        logger.info(f"[LongPressWithTimeoutDetection] → 执行了按键 E (自动战斗)")
+                        logger.info(f"[LongPressWithTimeoutDetection] -> 执行了按键 E (自动战斗)")
                         
                         # 等待 interrupt 节点的 post_delay
-                        logger.info(f"[LongPressWithTimeoutDetection] → 等待 8 秒...")
+                        logger.info(f"[LongPressWithTimeoutDetection] -> 等待 8 秒...")
                         time.sleep(8)  # autoBattle_for_win 的 post_delay 是 8000ms
                         
                     except Exception as e:
                         logger.error(f"[LongPressWithTimeoutDetection] 执行 interrupt 节点出错: {e}", exc_info=True)
                     
                     # 等待检测间隔
-                    logger.info(f"[LongPressWithTimeoutDetection] → 等待检测间隔 {check_interval}ms...")
+                    logger.info(f"[LongPressWithTimeoutDetection] -> 等待检测间隔 {check_interval}ms...")
                     time.sleep(check_interval / 1000.0)
                     
         except Exception as e:
@@ -173,7 +223,7 @@ class LongPressMultipleKeys(CustomAction):
             logger.info(f"[LongPressMultipleKeys] 步骤 1: 按下所有键...")
             down_jobs = []
             for key in keys:
-                logger.info(f"  → 按下键: {key}")
+                logger.info(f"  -> 按下键: {key}")
                 job = context.tasker.controller.post_key_down(key)
                 down_jobs.append(job)
             
@@ -189,7 +239,7 @@ class LongPressMultipleKeys(CustomAction):
             logger.info(f"[LongPressMultipleKeys] 步骤 3: 释放所有键...")
             up_jobs = []
             for key in keys:
-                logger.info(f"  → 释放键: {key}")
+                logger.info(f"  -> 释放键: {key}")
                 job = context.tasker.controller.post_key_up(key)
                 up_jobs.append(job)
             
@@ -197,7 +247,7 @@ class LongPressMultipleKeys(CustomAction):
             # for job in up_jobs:
             #     job.wait()
             
-            logger.info(f"[LongPressMultipleKeys] ✓ 完成！同时长按 {len(keys)} 个键共 {duration}ms")
+            logger.info(f"[LongPressMultipleKeys] [OK] 完成！同时长按 {len(keys)} 个键共 {duration}ms")
             logger.info("=" * 50)
             
             return True
@@ -256,10 +306,10 @@ class SequentialLongPress(CustomAction):
                 delay = key_info.get("delay", 0)  # 按下此键前的延迟（毫秒）
                 
                 if delay > 0:
-                    logger.info(f"  → 等待 {delay}ms...")
+                    logger.info(f"  -> 等待 {delay}ms...")
                     time.sleep(delay / 1000.0)
                 
-                logger.info(f"  → 按下键 {i+1}/{len(key_sequence)}: {key}")
+                logger.info(f"  -> 按下键 {i+1}/{len(key_sequence)}: {key}")
                 context.tasker.controller.post_key_down(key)
                 pressed_keys.append(key)
             
@@ -270,10 +320,10 @@ class SequentialLongPress(CustomAction):
             # 步骤 3: 一起释放所有键
             logger.info(f"[SequentialLongPress] 步骤 3: 释放所有键...")
             for key in pressed_keys:
-                logger.info(f"  → 释放键: {key}")
+                logger.info(f"  -> 释放键: {key}")
                 context.tasker.controller.post_key_up(key)
             
-            logger.info(f"[SequentialLongPress] ✓ 完成！顺序按下 {len(pressed_keys)} 个键，保持 {hold_duration}ms")
+            logger.info(f"[SequentialLongPress] [OK] 完成！顺序按下 {len(pressed_keys)} 个键，保持 {hold_duration}ms")
             logger.info("=" * 50)
             
             return True
@@ -288,3 +338,51 @@ class SequentialLongPress(CustomAction):
                 except:
                     pass
             return False
+
+
+# ========== PostMessage 按键输入动作（支持扫描码） ==========
+
+@AgentServer.custom_action("RunWithShift")
+class RunWithShiftAction(RunWithShift):
+    """
+    奔跑动作：先按下方向键，再按下 Shift，保持指定时长
+    使用 PostMessage + 扫描码实现，兼容性更好
+    
+    参数示例：
+    {
+        "direction": "w",      // 方向键：'w', 'a', 's', 'd' 或 'up', 'down', 'left', 'right'
+        "duration": 2.0,       // 持续时长（秒）
+        "shift_delay": 0.05    // 按下方向键后，多久按下 Shift（秒），默认 0.05
+    }
+    """
+    pass
+
+
+@AgentServer.custom_action("LongPressKey")
+class LongPressKeyAction(LongPressKey):
+    """
+    长按单个按键
+    使用 PostMessage + 扫描码实现
+    
+    参数示例：
+    {
+        "key": "w",           // 按键：字符或虚拟键码
+        "duration": 2.0       // 持续时长（秒）
+    }
+    """
+    pass
+
+
+@AgentServer.custom_action("PressMultipleKeys")
+class PressMultipleKeysAction(PressMultipleKeys):
+    """
+    同时按下多个按键
+    使用 PostMessage + 扫描码实现
+    
+    参数示例：
+    {
+        "keys": ["w", "shift"],  // 按键列表
+        "duration": 2.0          // 持续时长（秒）
+    }
+    """
+    pass

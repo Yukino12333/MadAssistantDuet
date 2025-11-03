@@ -1,4 +1,13 @@
 {
+    "SetDodgeKey": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "SetDodgeKey",
+        "custom_action_param": {
+            "dodge_key": 2
+        },
+        "next": []
+    },
     "按上6.2秒_for_win": {
         "recognition": "DirectHit",
         "action": "LongPressKey",
@@ -26,21 +35,32 @@
             "按左26秒_for_win"
         ]
     },
-    "按左26秒_for_win": {
+    "按左26秒_for_win":{
         "recognition": "DirectHit",
         "action": "Custom",
-        "custom_action": "SequentialLongPress",
+        "custom_action":"RunWithShift",
         "custom_action_param": {
-            "key_sequence": [
-                {"key": 65, "delay": 0},
-                {"key": 2, "delay": 500}
-            ],
-            "hold_duration": 14500
+            "direction": "a",     
+            "duration": 14.5,       
+            "shift_delay": 0.05  
         },
-        "next": [
-            "按上4秒_2_for_win"
-        ]
+        "next": ["按上4秒_2_for_win"]
     },
+    // "按左26秒_for_win": {
+    //     "recognition": "DirectHit",
+    //     "action": "Custom",
+    //     "custom_action": "SequentialLongPress",
+    //     "custom_action_param": {
+    //         "key_sequence": [
+    //             {"key": 65, "delay": 0},
+    //             {"key": 2, "delay": 500}
+    //         ],
+    //         "hold_duration": 14500
+    //     },
+    //     "next": [
+    //         "按上4秒_2_for_win"
+    //     ]
+    // },
     "按上4秒_2_for_win": {
         "recognition": "DirectHit",
         "action": "LongPressKey",

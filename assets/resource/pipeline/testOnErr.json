@@ -44,5 +44,16 @@
             "hold_duration": 13000
         },
         "next": []
+    },
+    "测试跑步":{
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action":"RunWithShift",
+        "custom_action_param": {
+            "direction": "d",     
+            "duration": 5,       
+            "shift_delay": 0.05  
+        },
+        "next": []
     }
 }
