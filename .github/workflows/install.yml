@@ -137,7 +137,6 @@ jobs:
           }
 
           echo "Copying dependency setup tools..."
-          Copy-Item -Force tools\DependencySetup_依赖库安装.bat install\
 
           echo "Build complete!"
         shell: pwsh
