@@ -28,10 +28,6 @@ a = Analysis(
         'win32api',
         'win32con',
         'win32gui',
-        'win32com',
-        'win32com.shell',
-        'win32com.shell.shell',
-        'pywintypes',
     ],
     hookspath=[],
     hooksconfig={},
@@ -42,12 +38,6 @@ a = Analysis(
     cipher=block_cipher,
     noarchive=False,
 )
-
-# 收集所有 pywin32 相关的模块
-a.binaries = a.binaries + TOC([
-    ('pythoncom310.dll', None, 'BINARY'),
-    ('pywintypes310.dll', None, 'BINARY'),
-])
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 

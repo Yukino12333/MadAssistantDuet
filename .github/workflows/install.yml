@@ -100,14 +100,18 @@ jobs:
           python -m pip install -r ./requirements.txt
           python -m pip install pyinstaller
 
+          # pywin32 post-install (注册 COM 组件)
+          python -c "import sys; from pathlib import Path; script = Path(sys.executable).parent / 'Scripts' / 'pywin32_postinstall.py'; exec(open(script).read(), {'__name__': '__main__', '__file__': str(script)})" -install
+        shell: pwsh
+
       - name: Build MaaAgent with PyInstaller
         run: |
           echo "Building MaaAgent.exe with PyInstaller..."
-          pyinstaller tools/MaaAgent.spec
-          
+          pyinstaller tools/MaaAgent.spec --collect-all pywin32
+
           echo "MaaAgent.exe built successfully"
           dir dist\MaaAgent.exe
-          
+
           echo "==================================="
           $fileSize = (Get-Item dist\MaaAgent.exe).Length / 1MB
           echo "MaaAgent.exe size: $($fileSize.ToString('0.00')) MB"
