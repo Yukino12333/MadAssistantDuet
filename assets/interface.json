@@ -27,10 +27,16 @@
     "task": [
         {
             "name":"闪避键设置（默认为L Shift）",
-            "entry":"SetDodgeKey",
+            "entry":"set_dodge_key",
             "doc":"设置闪避键，默认为L Shift",
             "option": ["闪避键设置"]
         },
+        {
+            "name": "自动战斗设置（默认为循环E）",
+            "entry": "set_auto_battle_mode",
+            "doc":"设置自动战斗的模式，默认是循环E，适用于水母等开E不会动的角色",
+            "option": ["自动战斗设置"]
+        }
         {
             "name": "65级mod（扼守）",
             "entry": "def_map1_entry",
@@ -48,7 +54,7 @@
                 {
                     "name": "左Shift键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 160
                             }
@@ -58,7 +64,7 @@
                 {
                     "name": "Ctrl键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 17
                             }
@@ -68,7 +74,7 @@
                 {
                     "name": "Alt键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 18
                             }
@@ -78,7 +84,7 @@
                 {
                     "name": "空格键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 32
                             }
@@ -88,7 +94,7 @@
                 {
                     "name": "数字5键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 53
                             }
@@ -98,7 +104,7 @@
                 {
                     "name": "鼠标右键",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 2
                             }
@@ -108,7 +114,7 @@
                 {
                     "name": "鼠标侧键1",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 5
                             }
@@ -118,7 +124,7 @@
                 {
                     "name": "鼠标侧键2",
                     "pipeline_override": {
-                        "SetDodgeKey": {
+                        "set_dodge_key": {
                             "custom_action_param": {
                                 "dodge_key": 6
                             }
@@ -127,6 +133,31 @@
                 }
             ],
             "default_case": "左Shift键"
+        },
+        "自动战斗设置":{
+            "cases": [
+                {
+                    "name": "循环E",
+                    "pipeline_override": {
+                        "set_auto_battle_mode":{
+                            "custom_action_param":{
+                                "auto_battle_mode": 0
+                            }
+                        }
+                    }
+                },
+                                {
+                    "name":"无操作",
+                    "pipeline_override": {
+                        "set_auto_battle_mode":{
+                            "custom_action_param":{
+                                "auto_battle_mode": 1
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "循环E"
         }
     }
 }

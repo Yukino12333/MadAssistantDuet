@@ -19,7 +19,8 @@ from maa.toolkit import Toolkit
 # 全局配置变量
 GAME_CONFIG = {
     # "dodge_key": win32con.VK_RBUTTON  # 默认闪避键为 右键 (0x02)
-    "dodge_key": 160 # 左 Shift 键 (0xA0)
+    "dodge_key": 160,  # 左 Shift 键 (0xA0)
+    "auto_battle_mode": 1  # 自动战斗模式：0=循环按E键, 1=什么也不做
 }
 
 # 重要：必须在 AgentServer.start_up() 之前导入，以便装饰器注册自定义 Action 和 Recognition

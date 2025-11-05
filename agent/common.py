@@ -344,5 +344,112 @@ class ResetCharacterPosition(CustomAction):
                     return False
         
         return False
-    
-    # _save_debug_screenshot 已移除
+
+@AgentServer.custom_action("AutoBattle")
+class AutoBattle(CustomAction):
+    """
+    循环检测目标文字，支持超时处理和中断动作
+    当未检测到目标时，执行中断动作（自动战斗）
+    """
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> bool:
+        # 从参数中获取配置
+        # custom_action_param 是 JSON 字符串，需要解析为字典
+        try:
+            if isinstance(argv.custom_action_param, str):
+                params = json.loads(argv.custom_action_param)
+            elif isinstance(argv.custom_action_param, dict):
+                params = argv.custom_action_param
+            else:
+                logger.error(f"[AutoBattle] 参数类型错误: {type(argv.custom_action_param)}")
+                return False
+        except json.JSONDecodeError as e:
+            logger.error(f"[AutoBattle] JSON 解析失败: {e}")
+            logger.error(f"  参数内容: {argv.custom_action_param}")
+            return False
+        
+        check_interval = params.get("check_interval", 5000)  # 检测间隔
+        total_timeout = params.get("total_timeout", 180000)  # 总超时时间 180s
+        target_node = params.get("target_node", "again_for_win")  # 要检测的目标节点
+        interrupt_node = params.get("interrupt_node", "autoBattle_for_win")  # 未检测到时的候补节点
+        
+        logger.info("=" * 50)
+        logger.info("[AutoBattle] 开始战斗循环检测")
+        logger.info(f"  检测间隔: {check_interval}ms, 总超时: {total_timeout}ms")
+        logger.info(f"  目标节点: {target_node}, 中断节点: {interrupt_node}")
+        
+        try:
+            # 开始循环检测目标节点
+            start_time = time.time()
+            loop_count = 0
+            
+            while True:
+                loop_count += 1
+                elapsed = (time.time() - start_time) * 1000  # 已经过的时间（毫秒）
+                
+                # 检查是否超时
+                if elapsed >= total_timeout:
+                    logger.warning(f"[AutoBattle] 超时 {total_timeout}ms，跳转到 on_error")
+                    logger.info(f"  总循环次数: {loop_count}")
+                    return False
+                
+                # 尝试检测目标节点
+                logger.info(f"[AutoBattle] 第 {loop_count} 次检测 '{target_node}'... (已用时: {int(elapsed)}ms / {total_timeout}ms)")
+                
+                # 获取最新截图
+                sync_job = context.tasker.controller.post_screencap()
+                sync_job.wait()
+                image = context.tasker.controller.cached_image  # 这是属性,不是方法
+                
+                # 运行目标节点的识别
+                reco_result = context.run_recognition(target_node, image)
+                
+                # 检查识别结果是否有效（box 不为 None 且宽高大于 0）
+                if reco_result and reco_result.box and reco_result.box.w > 0 and reco_result.box.h > 0:
+                    logger.info(f"[AutoBattle] [OK] 检测到 '{target_node}'")
+                    logger.info(f"  识别框: x={reco_result.box.x}, y={reco_result.box.y}, w={reco_result.box.w}, h={reco_result.box.h}")
+                    logger.info(f"  识别算法: {reco_result.algorithm}")
+                    logger.info(f"  总循环次数: {loop_count}, 总用时: {int(elapsed)}ms")
+                    # 动态设置 next 节点
+                    context.override_next(argv.node_name, [target_node])
+                    return True
+                else:
+                    # 详细记录未识别的原因
+                    if not reco_result:
+                        logger.info(f"[AutoBattle] [X] 未检测到 '{target_node}' (reco_result 为 None)")
+                    elif not reco_result.box:
+                        logger.info(f"[AutoBattle] [X] 未检测到 '{target_node}' (box 为 None)")
+                    else:
+                        logger.info(f"[AutoBattle] [X] 未检测到 '{target_node}' (box 无效: w={reco_result.box.w}, h={reco_result.box.h})")
+                    
+                    logger.info(f"[AutoBattle] -> 执行 interrupt '{interrupt_node}'")
+                 
+                    # 从全局配置获取自动战斗模式
+                    import main
+                    auto_battle_mode = main.GAME_CONFIG.get("auto_battle_mode", 0)
+                    
+                    if auto_battle_mode == 0:
+                        # 模式 0: 循环按 E 键（默认）
+                        logger.info(f"[AutoBattle] -> 模式 0: 执行自动战斗（按 E 键）")
+                        click_job = context.tasker.controller.post_click_key(69)  # E 键
+                        click_job.wait()
+                    elif auto_battle_mode == 1:
+                        # 模式 1: 什么也不做
+                        logger.info(f"[AutoBattle] -> 模式 1: 什么也不做，仅等待")
+                    else:
+                        logger.warning(f"[AutoBattle] -> 未知模式 {auto_battle_mode}，默认执行模式 0")
+                        click_job = context.tasker.controller.post_click_key(69)  # E 键
+                        click_job.wait()
+
+                    # 等待检测间隔
+                    logger.info(f"[AutoBattle] -> 等待检测间隔 {check_interval}ms...")
+                    time.sleep(check_interval / 1000.0)
+                    
+        except Exception as e:
+            logger.error(f"[AutoBattle] 发生异常: {e}", exc_info=True)
+            return False
+

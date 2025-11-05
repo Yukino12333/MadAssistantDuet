@@ -59,6 +59,64 @@ class SetDodgeKey(CustomAction):
             return False
 
 
+@AgentServer.custom_action("SetAutoBattleMode")
+class SetAutoBattleMode(CustomAction):
+    """
+    设置自动战斗模式配置
+    用于保存用户选择的自动战斗模式到全局配置中
+    
+    参数说明：
+    {
+        "auto_battle_mode": 0  // 自动战斗模式：0=循环按E键（默认）, 1=什么也不做
+    }
+    """
+
+    def run(
+        self,
+        context: Context,
+        argv: CustomAction.RunArg,
+    ) -> bool:
+        try:
+            # 解析参数
+            if isinstance(argv.custom_action_param, str):
+                params = json.loads(argv.custom_action_param)
+            elif isinstance(argv.custom_action_param, dict):
+                params = argv.custom_action_param
+            else:
+                logger.error(f"[SetAutoBattleMode] 参数类型错误: {type(argv.custom_action_param)}")
+                return False
+            
+            # 获取自动战斗模式（默认为 0）
+            auto_battle_mode = params.get("auto_battle_mode", 0)
+            
+            # 验证模式值
+            if auto_battle_mode not in [0, 1]:
+                logger.error(f"[SetAutoBattleMode] 无效的模式值: {auto_battle_mode}，仅支持 0 或 1")
+                return False
+            
+            # 导入 main 模块以访问全局配置
+            import main
+            
+            # 保存到全局配置
+            main.GAME_CONFIG["auto_battle_mode"] = auto_battle_mode
+            
+            mode_desc = "循环按E键" if auto_battle_mode == 0 else "什么也不做"
+            logger.info(f"[SetAutoBattleMode] [OK] 自动战斗模式已设置为: {auto_battle_mode} ({mode_desc})")
+            logger.info(f"[SetAutoBattleMode] 当前配置: {main.GAME_CONFIG}")
+            
+            # 强制刷新截图缓存，避免后续节点使用旧图
+            logger.info(f"[SetAutoBattleMode] 刷新截图缓存...")
+            screencap_job = context.tasker.controller.post_screencap()
+            screencap_job.wait()
+            logger.info(f"[SetAutoBattleMode] [OK] 截图缓存已更新")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"[SetAutoBattleMode] 发生异常: {e}", exc_info=True)
+            return False
+
+
 @AgentServer.custom_action("my_action_111")
 class MyCustomAction(CustomAction):
 
@@ -73,110 +131,6 @@ class MyCustomAction(CustomAction):
         return True
 
 
-@AgentServer.custom_action("LongPressWithTimeoutDetection")
-class LongPressWithTimeoutDetection(CustomAction):
-    """
-    循环检测目标文字，支持超时处理和中断动作
-    当未检测到目标时，执行中断动作（自动战斗）
-    """
-
-    def run(
-        self,
-        context: Context,
-        argv: CustomAction.RunArg,
-    ) -> bool:
-        # 从参数中获取配置
-        # custom_action_param 是 JSON 字符串，需要解析为字典
-        try:
-            if isinstance(argv.custom_action_param, str):
-                params = json.loads(argv.custom_action_param)
-            elif isinstance(argv.custom_action_param, dict):
-                params = argv.custom_action_param
-            else:
-                logger.error(f"[LongPressWithTimeoutDetection] 参数类型错误: {type(argv.custom_action_param)}")
-                return False
-        except json.JSONDecodeError as e:
-            logger.error(f"[LongPressWithTimeoutDetection] JSON 解析失败: {e}")
-            logger.error(f"  参数内容: {argv.custom_action_param}")
-            return False
-        
-        check_interval = params.get("check_interval", 5000)  # 检测间隔
-        total_timeout = params.get("total_timeout", 180000)  # 总超时时间 180s
-        target_node = params.get("target_node", "again_for_win")  # 要检测的目标节点
-        interrupt_node = params.get("interrupt_node", "autoBattle_for_win")  # 未检测到时的候补节点
-        
-        logger.info("=" * 50)
-        logger.info("[LongPressWithTimeoutDetection] 开始战斗循环检测")
-        logger.info(f"  检测间隔: {check_interval}ms, 总超时: {total_timeout}ms")
-        logger.info(f"  目标节点: {target_node}, 中断节点: {interrupt_node}")
-        
-        try:
-            # 开始循环检测目标节点
-            start_time = time.time()
-            loop_count = 0
-            
-            while True:
-                loop_count += 1
-                elapsed = (time.time() - start_time) * 1000  # 已经过的时间（毫秒）
-                
-                # 检查是否超时
-                if elapsed >= total_timeout:
-                    logger.warning(f"[LongPressWithTimeoutDetection] 超时 {total_timeout}ms，跳转到 on_error")
-                    logger.info(f"  总循环次数: {loop_count}")
-                    return False
-                
-                # 尝试检测目标节点
-                logger.info(f"[LongPressWithTimeoutDetection] 第 {loop_count} 次检测 '{target_node}'... (已用时: {int(elapsed)}ms / {total_timeout}ms)")
-                
-                # 获取最新截图
-                sync_job = context.tasker.controller.post_screencap()
-                sync_job.wait()
-                image = context.tasker.controller.cached_image  # 这是属性,不是方法
-                
-                # 运行目标节点的识别
-                reco_result = context.run_recognition(target_node, image)
-                
-                # 检查识别结果是否有效（box 不为 None 且宽高大于 0）
-                if reco_result and reco_result.box and reco_result.box.w > 0 and reco_result.box.h > 0:
-                    logger.info(f"[LongPressWithTimeoutDetection] [OK] 检测到 '{target_node}'")
-                    logger.info(f"  识别框: x={reco_result.box.x}, y={reco_result.box.y}, w={reco_result.box.w}, h={reco_result.box.h}")
-                    logger.info(f"  识别算法: {reco_result.algorithm}")
-                    logger.info(f"  总循环次数: {loop_count}, 总用时: {int(elapsed)}ms")
-                    # 动态设置 next 节点
-                    context.override_next(argv.node_name, [target_node])
-                    return True
-                else:
-                    # 详细记录未识别的原因
-                    if not reco_result:
-                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (reco_result 为 None)")
-                    elif not reco_result.box:
-                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (box 为 None)")
-                    else:
-                        logger.info(f"[LongPressWithTimeoutDetection] [X] 未检测到 '{target_node}' (box 无效: w={reco_result.box.w}, h={reco_result.box.h})")
-                    
-                    logger.info(f"[LongPressWithTimeoutDetection] -> 执行 interrupt '{interrupt_node}'")
-                    
-                    # 直接执行 interrupt 节点的动作（按 E 键）
-                    try:
-                        # 获取 interrupt_node 的配置并执行
-                        click_job = context.tasker.controller.post_click_key(69)  # E 键
-                        click_job.wait()
-                        logger.info(f"[LongPressWithTimeoutDetection] -> 执行了按键 E (自动战斗)")
-                        
-                        # 等待 interrupt 节点的 post_delay
-                        # logger.info(f"[LongPressWithTimeoutDetection] -> 等待 5 秒...")
-                        # time.sleep(5)  # autoBattle_for_win 的 post_delay 是 5000ms
-
-                    except Exception as e:
-                        logger.error(f"[LongPressWithTimeoutDetection] 执行 interrupt 节点出错: {e}", exc_info=True)
-                    
-                    # 等待检测间隔
-                    logger.info(f"[LongPressWithTimeoutDetection] -> 等待检测间隔 {check_interval}ms...")
-                    time.sleep(check_interval / 1000.0)
-                    
-        except Exception as e:
-            logger.error(f"[LongPressWithTimeoutDetection] 发生异常: {e}", exc_info=True)
-            return False
 
 
 @AgentServer.custom_action("LongPressMultipleKeys")

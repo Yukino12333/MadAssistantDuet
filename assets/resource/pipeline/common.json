@@ -1,0 +1,21 @@
+{
+    "set_dodge_key": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "SetDodgeKey",
+        "custom_action_param": {
+            "dodge_key": 2
+        },
+        "next": []
+    },
+    "set_auto_battle_mode":{
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action":"SetAutoBattleMode",
+        "custom_action_param":{
+            "auto_battle_mode": 1
+        },
+        "next": []
+
+    }
+}

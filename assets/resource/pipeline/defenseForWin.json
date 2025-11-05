@@ -1,13 +1,5 @@
 {
-    "SetDodgeKey": {
-        "recognition": "DirectHit",
-        "action": "Custom",
-        "custom_action": "SetDodgeKey",
-        "custom_action_param": {
-            "dodge_key": 2
-        },
-        "next": []
-    },
+
     "按上6.2秒_for_win": {
         "recognition": "DirectHit",
         "action": "LongPressKey",

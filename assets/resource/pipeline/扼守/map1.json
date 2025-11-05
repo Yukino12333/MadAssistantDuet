@@ -99,7 +99,7 @@
     "def_map1_auto_battle": {
         "recognition": "DirectHit",
         "action": "Custom",
-        "custom_action": "LongPressWithTimeoutDetection",
+        "custom_action": "AutoBattle",
         "custom_action_param": {
             "check_interval": 5000,
             "total_timeout": 200000,
