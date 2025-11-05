@@ -3,25 +3,28 @@
         "recognition": "DirectHit",
         "action": "ClickKey",
         "key": 27,
+        "post_delay": 1000,
         "next": ["def_map1_giveup"]
     },
     "def_map1_giveup":{
         "recognition": "OCR",
         "expected": ["放弃挑战"],
         "action": "Click",
+        "post_delay": 1000,
         "next": ["def_map1_confirm"]
     }, 
     "def_map1_confirm":{
         "recognition": "OCR",
         "expected": ["确定"],
         "action": "Click",
+        "post_delay": 1000,
         "next": ["def_map1_again"]
     },
     "def_map1_again": {
         "recognition": "OCR",
         "expected": "再次进行",
-        "timeout": 1000,
         "action": "Click",
+        "post_delay": 1000,
         "next": ["def_map1_start"]
     },
     "def_map1_start": {

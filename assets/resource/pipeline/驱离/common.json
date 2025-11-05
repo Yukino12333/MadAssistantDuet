@@ -3,25 +3,28 @@
         "recognition": "DirectHit",
         "action": "ClickKey",
         "key": 27,
+        "post_delay": 1000,
         "next": ["expulsion_giveup"]
     },
     "expulsion_giveup":{
         "recognition": "OCR",
         "expected": ["放弃挑战"],
         "action": "Click",
+        "post_delay": 1000,
         "next": ["expulsion_confirm"]
     }, 
     "expulsion_confirm":{
         "recognition": "OCR",
         "expected": ["确定"],
         "action": "Click",
+        "post_delay": 1000,
         "next": ["expulsion_again"]
     },
     "expulsion_again": {
         "recognition": "OCR",
         "expected": "再次进行",
-        "timeout": 1000,
         "action": "Click",
+        "post_delay": 1000,
         "next": ["expulsion_start"]
     },
     "expulsion_start": {
