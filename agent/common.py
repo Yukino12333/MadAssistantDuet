@@ -149,6 +149,7 @@ class ResetCharacterPosition(CustomAction):
                         return False
                 
                 logger.info(f"  [OK] 找到'设置': box=({reco_result.box.x}, {reco_result.box.y}, {reco_result.box.w}, {reco_result.box.h})")
+                time.sleep(0.5) 
                 
                 # 点击识别框的中心
                 click_x = reco_result.box.x + reco_result.box.w // 2
@@ -212,6 +213,8 @@ class ResetCharacterPosition(CustomAction):
                 
                 logger.info(f"  [OK] 找到模板: box=({reco_result.box.x}, {reco_result.box.y}, {reco_result.box.w}, {reco_result.box.h})")
                 
+                time.sleep(0.5) 
+
                 # 点击识别框的中心
                 click_x = reco_result.box.x + reco_result.box.w // 2
                 click_y = reco_result.box.y + reco_result.box.h // 2
@@ -267,6 +270,8 @@ class ResetCharacterPosition(CustomAction):
                 
                 logger.info(f"  [OK] 找到'复位角色': box=({reco_result.box.x}, {reco_result.box.y}, {reco_result.box.w}, {reco_result.box.h})")
                 
+                time.sleep(0.5) 
+
                 # 点击识别框的中心
                 click_x = reco_result.box.x + reco_result.box.w // 2
                 click_y = reco_result.box.y + reco_result.box.h // 2
@@ -319,6 +324,8 @@ class ResetCharacterPosition(CustomAction):
                         return False
                 
                 logger.info(f"  [OK] 找到'确定': box=({reco_result.box.x}, {reco_result.box.y}, {reco_result.box.w}, {reco_result.box.h})")
+                
+                time.sleep(0.5)
                 
                 # 点击识别框的中心
                 click_x = reco_result.box.x + reco_result.box.w // 2
