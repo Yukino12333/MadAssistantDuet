@@ -170,7 +170,7 @@
                 {
                     "name": "1轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 1
                             }
@@ -180,7 +180,7 @@
                 {
                     "name": "2轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 2
                             }
@@ -190,7 +190,7 @@
                 {
                     "name": "3轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 3
                             }
@@ -200,7 +200,7 @@
                 {
                     "name": "4轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 4
                             }
@@ -210,7 +210,7 @@
                 {
                     "name": "5轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 5
                             }
@@ -220,7 +220,7 @@
                 {
                     "name": "6轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 6
                             }
@@ -230,7 +230,7 @@
                 {
                     "name": "7轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 7
                             }
@@ -240,7 +240,7 @@
                 {
                     "name": "8轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 8
                             }
@@ -250,7 +250,7 @@
                 {
                     "name": "9轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 9
                             }
@@ -260,7 +260,7 @@
                 {
                     "name": "10轮",
                     "pipeline_override": {
-                        "set_battle_rounds": {
+                        "JJcoin_rounds": {
                             "custom_action_param": {
                                 "battle_rounds": 10
                             }
