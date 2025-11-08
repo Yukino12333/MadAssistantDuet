@@ -46,6 +46,11 @@
             "name": "驱离通用",
             "entry": "expulsion_entry",
             "doc": "驱离本的通用流程，进入副本后再启动脚本"
+        },
+        {
+            "name": "皎皎币",
+            "entry": "JJcoin_entry",
+            "doc": "60级皎皎币副本流程，进入副本后再启动脚本"
         }
     ],
     "option": {
