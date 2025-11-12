@@ -119,10 +119,7 @@
         "recognition": "DirectHit",
         "action": "Custom",
         "custom_action": "ResetCharacterPosition",
-        "custom_action_param": {
-            "template_path": "common/其他.png",
-            "wait_delay": 800
-        },
+        "custom_action_param": {},
         "next": ["def_map1_auto_battle"]
     },
     "def_map1_auto_battle": {

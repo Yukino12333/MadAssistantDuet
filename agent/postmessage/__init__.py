@@ -1,15 +1,15 @@
 """
-PostMessage 输入模块
-提供基于 PostMessage API 的按键输入功能，支持扫描码
+PostMessage 自定义动作模块
+
+说明: 旧版的 PostMessageInputHelper 已移除，
+当前仅导出使用 Maa 控制器 API 的自定义动作。
 """
 
-# from .input_helper import PostMessageInputHelper
-from .actions import  RunWithShift, LongPressKey, PressMultipleKeys
+from .actions import RunWithShift, LongPressKey, PressMultipleKeys, RunWithJump
 
 __all__ = [
-    'PostMessageInputHelper',
-    
     'RunWithShift',
     'LongPressKey',
     'PressMultipleKeys',
+    'RunWithJump',
 ]

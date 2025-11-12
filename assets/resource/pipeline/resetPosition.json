@@ -2,27 +2,30 @@
     "ResetPosition": {
         "recognition": "DirectHit",
         "action": "Custom",
-        "custom_action": "ResetCharacterPosition",
-        "custom_action_param": {
-            "template_path": "common/其他.png",
-            "wait_delay": 800
-        },
+        "custom_action": "ResetCharacterPositionTemp",
+        "custom_action_param":{},
         "next": []
     },
-    
+    "Reset_Entry":{
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 1000,
+        "next": ["OCR_Settings","Template_Match_Setting","Reset_Entry"]
+    },
     "OCR_Settings": {
         "recognition": "OCR",
         "expected": ["设置","设管"],
         "roi" : [915,672,32,15],
         "action": "Click",
-        "next": ["Template_Other"]
+        "next": ["Template_Other","OCR_Settings"]
     },
     "Template_Match_Setting":{
         "recognition": "TemplateMatch",
         "template": "common/设置.png",
         "roi" : [899,623,63,54],
         "action": "Click",
-        "next": ["Template_Other"]
+        "next": ["Template_Other","Template_Match_Setting"]
     },
     "Template_Other": {
         "recognition": "TemplateMatch",
@@ -37,6 +40,7 @@
         "expected": ["复位角色"],
         "roi" : [731,210,64,25],
         "action": "Click",
+        "post_delay": 500,
         "next": ["OCR_Confirm","OCR_ResetCharacter"]
     },
     
