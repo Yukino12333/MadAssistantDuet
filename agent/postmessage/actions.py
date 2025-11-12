@@ -15,6 +15,7 @@ import logging
 import time
 from maa.custom_action import CustomAction
 from maa.context import Context
+from maa.agent.agent_server import AgentServer
 import win32con
 import sys
 import os
@@ -136,7 +137,7 @@ def debug_controller_attributes(ctrl, logger_instance=None):
     
     log_func("=" * 60)
 
-
+@AgentServer.custom_action("RunWithShift")
 class RunWithShift(CustomAction):
     """
     奔跑动作：先按下方向键,再按下闪避键(可配置),保持指定时长
@@ -228,7 +229,7 @@ class RunWithShift(CustomAction):
             logger.error(f"[RunWithShift] 发生异常: {e}", exc_info=True)
             return False
 
-
+@AgentServer.custom_action("LongPressKey")
 class LongPressKey(CustomAction):
     """
     长按单个按键
@@ -293,7 +294,7 @@ class LongPressKey(CustomAction):
             logger.error(f"[LongPressKey] 发生异常: {e}", exc_info=True)
             return False
 
-
+@AgentServer.custom_action("PressMultipleKeys")
 class PressMultipleKeys(CustomAction):
     """
     同时按下多个按键
@@ -363,7 +364,7 @@ class PressMultipleKeys(CustomAction):
             logger.error(f"[PressMultipleKeys] 发生异常: {e}", exc_info=True)
             return False
 
-
+@AgentServer.custom_action("RunWithJump")
 class RunWithJump(CustomAction):
     """
     边跑边跳动作：先按下方向键，延迟后按下闪避键（奔跑），然后周期性短按空格键（跳跃）

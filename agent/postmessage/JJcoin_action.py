@@ -13,6 +13,7 @@ import time
 import os
 from maa.custom_action import CustomAction
 from maa.context import Context
+from maa.agent.agent_server import AgentServer
 import win32con
 import sys
 
@@ -55,7 +56,7 @@ def _name_to_vk(name: str, dodge_vk: int) -> int:
         return _char_to_vk(name)
     raise ValueError(f"不支持的按键: {name}")
 
-
+@AgentServer.custom_action("JsonActionSequence")
 class JsonActionSequence(CustomAction):
     """
     从JSON文件加载动作序列

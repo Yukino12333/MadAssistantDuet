@@ -79,8 +79,8 @@ class AutoBattle(CustomAction):
         context: Context,
         argv: CustomAction.RunArg,
     ) -> bool:
-        # 从参数中获取配置
-        # custom_action_param 是 JSON 字符串，需要解析为字典
+        # 从参数中获取配置（仅需要: check_interval(float), total_timeout(float), target_node(list[str])）
+        # 支持 JSON 字符串或字典，单位按秒传入，这里转换为毫秒以复用原实现
         try:
             if isinstance(argv.custom_action_param, str):
                 params = json.loads(argv.custom_action_param)
@@ -93,11 +93,18 @@ class AutoBattle(CustomAction):
             logger.error(f"[AutoBattle] JSON 解析失败: {e}")
             logger.error(f"  参数内容: {argv.custom_action_param}")
             return False
-        
-        check_interval = params.get("check_interval", 5000)  # 检测间隔
-        total_timeout = params.get("total_timeout", 180000)  # 总超时时间 180s
+
+        # 允许浮点数（秒），内部转换为毫秒兼容现有逻辑
+        check_interval_sec = float(params.get("check_interval", 5.0))
+        total_timeout_sec = float(params.get("total_timeout", 180.0))
+        check_interval = max(0, int(check_interval_sec * 1000))
+        total_timeout = max(0, int(total_timeout_sec * 1000))
+
         target_nodes = params.get("target_node", ["again_for_win"])  # 要检测的目标节点（支持数组）
-        interrupt_node = params.get("interrupt_node", "autoBattle_for_win")  # 未检测到时的候补节点
+        if isinstance(target_nodes, str):
+            target_nodes = [target_nodes]
+        # 兼容：保留旧字段以不破坏后续逻辑（但不再依赖 override_next）
+        interrupt_node = params.get("interrupt_node", "autoBattle_for_win")
         
         # 兼容旧配置：如果 target_node 是字符串，转换为数组
         if isinstance(target_nodes, str):
@@ -153,19 +160,9 @@ class AutoBattle(CustomAction):
                 
                 # 检查是否有任何一个节点被识别到
                 if detected_node:
-                    logger.info(f"[AutoBattle] [OK] 检测到 '{detected_node}'")
-                    logger.info(f"  识别框: x={reco_result.box.x}, y={reco_result.box.y}, w={reco_result.box.w}, h={reco_result.box.h}")
-                    logger.info(f"  识别算法: {reco_result.algorithm}")
-                    logger.info(f"  总循环次数: {loop_count}, 总用时: {int(elapsed)}ms")
-                    # 动态设置 next 节点
-                    context.override_next(argv.node_name, [detected_node])
+                    # 新逻辑：直接返回 True，不再 override_next
                     return True
                 else:
-                    # 所有节点都未识别到
-                    logger.info(f"[AutoBattle] [X] 未检测到任何目标节点 {target_nodes}")
-                    
-                    logger.info(f"[AutoBattle] -> 执行 interrupt '{interrupt_node}'")
-                 
                     # 从全局配置获取自动战斗模式
                     import main
                     auto_battle_mode = main.GAME_CONFIG.get("auto_battle_mode", 0)
@@ -227,22 +224,12 @@ class MultiRoundsAutoBattle(CustomAction):
         logger.info("[MultiRoundsAutoBattle] 开始多轮自动战斗")
         logger.info(f"  总轮数: {total_rounds} (来自全局配置), 每轮超时: {round_timeout}ms")
         
-        for round_num in range(1, total_rounds + 1):
+        for round_num in range(1, total_rounds):
             logger.info(f"[MultiRoundsAutoBattle] 第 {round_num}/{total_rounds} 轮战斗开始")
             
             # 执行 AutoBattle 动作
             auto_battle_action = AutoBattle()
 
-            # action_argv = CustomAction.RunArg(
-            #     node_name=argv.node_name,
-            #     custom_action_param=json.dumps({
-            #         "check_interval": params.get("check_interval", 5000),
-            #         "total_timeout": round_timeout,
-            #         "target_node": params.get("target_node"),
-            #         "interrupt_node": params.get("interrupt_node", "autoBattle_for_win")
-            #     })
-            # )
-            
             result = auto_battle_action.run(context, argv)
             
             if not result:
@@ -255,15 +242,9 @@ class MultiRoundsAutoBattle(CustomAction):
             for post_node in post_rounds:
                 logger.info(f"[MultiRoundsAutoBattle] 执行每轮后的处理节点: '{post_node}'")
                 task_detail = context.run_task(post_node)
-                # if task_detail:
-                #     # 等待任务完成
-                #     job = context.tasker.get_latest_task_job()
-                #     if job:
-                #         job.wait()
-                #         logger.info(f"[MultiRoundsAutoBattle] 处理节点 '{post_node}' 执行完成")
-                # else:
-                #     logger.warning(f"[MultiRoundsAutoBattle] 处理节点 '{post_node}' 启动失败")
-        
+
+        # 最后一轮
+        auto_battle_action.run(context, argv)
         logger.info(f"[MultiRoundsAutoBattle] [OK] 所有 {total_rounds} 轮战斗已完成")
         logger.info("=" * 50)
         return True

@@ -1,4 +1,7 @@
-﻿from maa.agent.agent_server import AgentServer
+﻿"""
+已弃用
+"""
+from maa.agent.agent_server import AgentServer
 from maa.custom_action import CustomAction
 from maa.context import Context
 import time

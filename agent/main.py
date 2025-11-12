@@ -30,8 +30,6 @@ GAME_CONFIG = {
 }
 
 # 重要：必须在 AgentServer.start_up() 之前导入，以便装饰器注册自定义 Action 和 Recognition
-import my_action
-import my_reco
 import common
 import setting
 import tools
