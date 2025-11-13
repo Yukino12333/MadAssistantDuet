@@ -1,0 +1,47 @@
+{
+  "name": "jj_60_part2_2",
+  "created_time": "2025-11-13 23:00:06",
+  "total_time": 17.562708377838135,
+  "actions": [
+    {
+      "type": "key_down",
+      "key": "s",
+      "time": 0.920767068862915
+    },
+    {
+      "type": "key_down",
+      "key": "shift",
+      "time": 1.2479283809661865
+    },
+    {
+      "type": "key_down",
+      "key": "D",
+      "time": 2.2862815856933594
+    },
+    {
+      "type": "key_up",
+      "key": "D",
+      "time": 2.8315882682800293
+    },
+    {
+      "type": "key_down",
+      "key": "D",
+      "time": 3.6208951473236084
+    },
+    {
+      "type": "key_up",
+      "key": "D",
+      "time": 4.11371922492981
+    },
+    {
+      "type": "key_up",
+      "key": "s",
+      "time": 17.11371922492981
+    },
+    {
+      "type": "key_up",
+      "key": "shift",
+      "time": 17.562708377838135
+    }
+  ]
+}

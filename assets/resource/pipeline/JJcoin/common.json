@@ -1,135 +1,110 @@
 {
-    "JJcoin_rounds": {
-        "action": "Custom",
-        "custom_action": "SetBattleRounds",
-        "custom_action_param": {
-            "battle_rounds": 3
-        },
-        "next": ["JJcoin_entry"]
-    },
-    "JJcoin_entry": {
-        "recognition": "DirectHit",
-        "action": "ClickKey",
-        "key": 27,
-        "post_delay": 1000,
-        "next": ["JJcoin_giveup","JJcoin_giveup_template","JJcoin_entry"]
-    },
-    "JJcoin_giveup":{
-        "recognition": "OCR",
-        "expected": ["放弃挑战"],
-        "roi" : [1152,673,58,15],
-        "action": "Click",
-        "post_delay": 1000,
-        "next": ["JJcoin_confirm"]
-    }, 
-    "JJcoin_giveup_template":{
-        "recognition": "TemplateMatch",
-        "template": "common/放弃挑战.png",
-        "roi" : [1157,626,48,49],
-        "action": "Click",
-        "post_delay": 1000,
-        "next": ["JJcoin_confirm"]
-    },
-    "JJcoin_confirm":{
-        "recognition": "OCR",
-        "expected": ["确定"],
-        "roi" : [737,391,39,23],
-        "action": "Click",
-        "post_delay": 1000,
-        "next": ["JJcoin_again","JJcoin_again_template","JJcoin_confirm"]
-    },
-    "JJcoin_again": {
-        "recognition": "OCR",
-        "expected": "再次进行",
-        "roi" : [882,620,79,30],
-        "action": "Click",
-        "post_delay": 1000,
-        "next": ["JJcoin_start", "JJcoin_again"]
-    },
-    "JJcoin_again_template": {
-        "recognition": "TemplateMatch",
-        "template": "common/再次进行.png",
-        "roi" : [819,619,35,35],
-        "action": "Click",
-        "post_delay": 1000,
-        "next": ["JJcoin_start", "JJcoin_again_template"]
-    },
-    "JJcoin_start": {
-        "recognition": "OCR",
-        "expected": "开始挑战",
-        "post_delay": 1000,
-        "action": "Click",
-        "next": ["JJcoin_in_battle", "JJcoin_start"]
-    },
     "JJcoin_in_battle":{
         "recognition":  "OCR",
         "expected": "前往目标点",
         "roi" : [1100,0,180,178],
-        "post_delay": 2000,
+        "post_delay": 1000,
         "action": "DoNothing",
         "next": ["JJcoin_map_rec"]
     },
     "JJcoin_map_rec":{
         "recognition": "DirectHit",
         "action": "DoNothing",
-        "post_delay": 2000,
-        "next": ["JJcoin_map1","JJcoin_map2"]
+        "next": ["JJcoin_part1_1_reset","JJcoin_part1_2"]
     },
-    "JJcoin_map1":{
+    "JJcoin_part1_1_reset":{
         "recognition": "TemplateMatch",
         "template": ["JJcoin/map1_start.jpg"],
         "threshold": [0.75],
         "roi" : [0,0,267,260],
-        "post_delay": 2000,
+        "action": "Custom",
+        "custom_action":"ResetCharacterPosition",
+        "custom_action_param":{},
+        "next": ["JJcoin_part1_1"],
+        "on_error": ["common_entry"]
+    },
+    "JJcoin_part1_1":{
+        "recognition": "DirectHit",
         "action": "Custom",
         "custom_action":"JsonActionSequence",
-        "custom_action_param":"JJcoin_map1_startend.json",
-        "next": ["JJcoin_taskcheck"],
+        "custom_action_param":"jj_60_part1_1.json",
+        "next": ["JJcoin_part1_reset"],
         "timeout": 20000,
-        "on_error": ["JJcoin_entry"]
+        "on_error": ["common_entry"]
     },
-    "JJcoin_map2":{
+    "JJcoin_part1_2":{
         "recognition": "TemplateMatch",
         "template": ["JJcoin/map2_start.jpg"],
         "threshold": [0.75],
         "roi" : [0,0,267,260],
-        "post_delay": 2000,
         "action": "Custom",
         "custom_action":"JsonActionSequence",
-        "custom_action_param": "JJcoin_map2_start1.json",
-        "on_error": ["JJcoin_entry"],
-        "next": ["JJcoin_map2_1a","JJcoin_map2_1b"]
-    },
-    "JJcoin_map2_1a":{
-        "recognition": "TemplateMatch",
-        "template": ["JJcoin/map2_1a.jpg"],
-        "roi" : [21,111,315,277],
-        "threshold": [0.7],
-        "post_delay": 2000,
-        "action": "Custom",
-        "custom_action":"JsonActionSequence",
-        "custom_action_param":"JJcoin_map2_1aend.json",
+        "custom_action_param":"jj_60_part1_2.json",
+        "next": ["JJcoin_part1_reset"],
         "timeout": 20000,
-        "on_error": ["JJcoin_entry"],
-        "next": ["common_multi_rounds_battle"]
+        "on_error": ["common_entry"]
     },
-    "JJcoin_map2_1b":{
-        "recognition": "TemplateMatch",
-        "template": ["JJcoin/map2_1b.jpg"],
-        "threshold": [0.7],
-        "roi" : [226,2,536,504],
-        "post_delay": 2000,
-        "timeout":20000,
-        "on_error": ["JJcoin_entry"],
+    "JJcoin_part1_reset":{
+        "recognition": "DirectHit",
         "action": "Custom",
-        "custom_action":"JsonActionSequence",
-        "custom_action_param": "JJcoin_map2_1bend.json",
-        "next": ["common_multi_rounds_battle"]
+        "custom_action":"ResetCharacterPosition",
+        "custom_action_param":{},
+        "next": ["JJcoin_part2_rec"]
     },
-    "JJcoin_map3":{
+    "JJcoin_part2_rec":{
         "recognition": "DirectHit",
         "action": "DoNothing",
-        "next": ["JJcoin_entry"]
+        "timeout": 5000,
+        "on_error": ["common_entry"],
+        "next": ["JJcoin_part2_1","JJcoin_part2_2","JJcoin_part2_3","JJcoin_part2_4"]
+    },
+    "JJcoin_part2_1":{
+        "recognition": "TemplateMatch",
+        "template": ["JJcoin/part2_1.png"],
+        "threshold": [0.75],
+        "roi" : [110,140,126,133],
+        "action": "Custom",
+        "custom_action":"JsonActionSequence",
+        "custom_action_param":"jj_60_part2_1.json",
+        "next": ["JJcoin_taskcheck"],
+        "timeout": 20000,
+        "on_error": ["common_entry"]
+    },
+    "JJcoin_part2_2":{
+        "recognition": "TemplateMatch",
+        "template": ["JJcoin/part2_2.png"],
+        "threshold": [0.75],
+        "roi" : [410,29,127,123],
+        "action": "Custom",
+        "custom_action":"JsonActionSequence",
+        "custom_action_param":"jj_60_part2_2.json",
+        "next": ["JJcoin_taskcheck"],
+        "timeout": 20000,
+        "on_error": ["common_entry"]
+    },
+    "JJcoin_part2_3":{
+        "recognition": "TemplateMatch",
+        "template": ["JJcoin/part2_3.png"],
+        "threshold": [0.75],
+        "roi" : [511,118,120,110],
+        "action": "Custom",
+        "custom_action":"JsonActionSequence",
+        "custom_action_param":"jj_60_part2_3.json",
+        "next": ["JJcoin_taskcheck"],
+        "timeout": 20000,
+        "on_error": ["common_entry"]
+    },
+    "JJcoin_part2_4":{
+        "recognition": "TemplateMatch",
+        "template": ["JJcoin/part2_4.png"],
+        "threshold": [0.75],
+        "roi" : [717,201,130,129],
+        "action": "Custom",
+        "custom_action":"JsonActionSequence",
+        "custom_action_param":"jj_60_part2_4.json",
+        "next": ["JJcoin_taskcheck"],
+        "timeout": 20000,
+        "on_error": ["common_entry"]
     },
     "JJcoin_taskcheck":{
         "recognition": "OCR",
@@ -141,7 +116,7 @@
             "target_node": ["JJcoin_finish"],
             "post_rounds":["JJcoin_continue_1"]
         },
-        "on_error": ["JJcoin_entry"],
+        "on_error": ["common_entry"],
         "next": ["JJcoin_finish"]
     },
     "JJcoin_finish":{
