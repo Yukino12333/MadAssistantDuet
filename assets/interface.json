@@ -207,12 +207,14 @@
             "pipeline_override": {
                 "def_map1_auto_battle": {
                     "custom_action_param": {
-                        "total_timeout": "{单轮战斗超时（毫秒）}"
+                        "total_timeout": "{单轮战斗超时（毫秒）}",
+                        "target_node": ["def_map1_again","def_map1_again_template"]
                     }
                 },
                 "expulsion_auto_battle": {
                     "custom_action_param": {
-                        "total_timeout": "{单轮战斗超时（毫秒）}"
+                        "total_timeout": "{单轮战斗超时（毫秒）}",
+                        "target_node": ["expulsion_again","expulsion_again_template"]
                     }
                 }
             },
@@ -231,7 +233,10 @@
             "pipeline_override": {
                 "JJcoin_taskcheck": {
                     "custom_action_param": {
-                        "total_timeout": "{单轮战斗超时（每一轮）（毫秒）}"
+                        "check_interval": 5000,
+                        "total_timeout": "{单轮战斗超时（每一轮）（毫秒）}",
+                        "target_node": ["JJcoin_finish"],
+                        "post_rounds":["JJcoin_continue_1"]
                     }
                 }
             },
