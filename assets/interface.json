@@ -200,7 +200,7 @@
                 "3"
             ],
             "pipeline_override": {
-                "JJcoin_rounds": {
+                "set_battle_rounds": {
                     "custom_action_param": {
                         "battle_rounds": "{作战轮数}"
                     }
