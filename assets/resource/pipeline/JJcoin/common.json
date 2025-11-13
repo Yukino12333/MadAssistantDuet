@@ -78,7 +78,7 @@
     "JJcoin_map1":{
         "recognition": "TemplateMatch",
         "template": ["JJcoin/map1_start.jpg"],
-        "threshold": [0.83],
+        "threshold": [0.75],
         "roi" : [0,0,267,260],
         "post_delay": 2000,
         "action": "Custom",
@@ -91,7 +91,7 @@
     "JJcoin_map2":{
         "recognition": "TemplateMatch",
         "template": ["JJcoin/map2_start.jpg"],
-        "threshold": [0.83],
+        "threshold": [0.75],
         "roi" : [0,0,267,260],
         "post_delay": 2000,
         "action": "Custom",

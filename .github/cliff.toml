@@ -17,7 +17,13 @@ body = """
 {% macro print_commit(commit) -%}
     - {% if commit.scope %}*({{ commit.scope }})* {% endif %}\
         {% if commit.breaking %}[**breaking**] {% endif %}\
-        {{ commit.message | split(pat="\n") | first | upper_first }} \
+        {%- set first_line = commit.message | split(pat="\n") | first -%}
+        {%- set parts = first_line | split(":") -%}
+        {%- if parts | length > 1 and commit.type is defined and (parts[0] == commit.type or parts[0].startswith(commit.type)) -%}
+            {{ (parts[1:] | join(":") ) | trim | upper_first }} \
+        {%- else -%}
+            {{ first_line | upper_first }} \
+        {%- endif -%}
         @{{ commit.author.name }}
         {%- if commit.footers -%}
             {%- for footer in commit.footers -%}
@@ -62,6 +68,11 @@ body = """
 
 # 尾部
 footer = """
+"""
+
+# 在 changelog 末尾追加镜像下载链接
+footer = """
+[已有 Mirror酱 CDK？点击前往高速下载](https://mirrorchyan.com/zh/projects?rid=MadAssistantDuet&channel=stable)
 """
 
 [git]
