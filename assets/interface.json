@@ -31,34 +31,48 @@
     },
     "task": [
         {
-            "name":"闪避键设置（默认为L Shift）",
-            "entry":"set_dodge_key",
-            "doc":"设置闪避键，默认为L Shift",
-            "option": ["闪避键设置"]
-        },
-        {
-            "name": "自动战斗设置（默认为循环E）",
-            "entry": "set_auto_battle_mode",
-            "doc":"设置自动战斗的模式，默认是循环E，适用于水母等开E不会动的角色",
-            "option": ["自动战斗设置"]
-        },
-        {
             "name": "65级mod（扼守）",
-            "entry": "def_map1_entry",
-            "advanced": ["单轮战斗超时"],
-            "doc": "进入指定副本后，即可启动，会先自动退出一次复位"
+            "entry": "set_dodge_key",
+            "doc": "进入指定副本后，即可启动，会先执行通用设置与通用开局",
+            "option": ["闪避键设置","自动战斗设置"],
+            "advanced": ["单轮战斗超时","自动E周期"],
+            "pipeline_override": {
+                "set_round_timeout": { "next": ["common_entry"] },
+                "common_start": { "next": ["def_map1_in_battle", "def_map1_in_battle_template", "common_start"] }
+            }
         },
         {
             "name": "驱离通用",
-            "entry": "expulsion_entry",
-            "advanced": ["单轮战斗超时"],
-            "doc": "驱离本的通用流程，进入副本后再启动脚本"
+            "entry": "set_dodge_key",
+            
+            "option": ["闪避键设置","自动战斗设置"],
+            "advanced": ["单轮战斗超时","自动E周期"],
+            "pipeline_override": {
+                "set_round_timeout": { "next": ["common_entry"] },
+                "common_start": { "next": ["expulsion_in_battle", "expulsion_in_battle_template", "common_start"] }
+            }
         },
         {
             "name": "60级皎皎币",
-            "entry": "JJcoin_rounds",
-            "doc": "60级皎皎币副本流程，进入副本后再启动脚本",
-            "advanced": ["战斗轮数设置","单轮战斗超时（每一轮）"]
+            "entry": "set_dodge_key",
+            
+            "option": ["闪避键设置","自动战斗设置"],
+            "advanced": ["单轮战斗超时","自动E周期","战斗轮数设置"],
+            "pipeline_override": {
+                "set_round_timeout": { "next": ["set_battle_rounds"] },
+                "set_battle_rounds": { "next": ["common_entry"] },
+                "common_start": { "next": ["JJcoin_in_battle", "common_start"] },
+                "common_multi_rounds_battle": {
+                    "recognition": "OCR",
+                    "expected": ["保护探险家"],
+                    "custom_action_param": {
+                        "target_node": ["JJcoin_finish"],
+                        "post_rounds": ["JJcoin_continue_1"]
+                    },
+                    "on_error": ["common_entry"],
+                    "next": ["JJcoin_finish"]
+                }
+            }
         }
     ],
     "option": {
@@ -205,42 +219,32 @@
                 "200000"
             ],
             "pipeline_override": {
-                "def_map1_auto_battle": {
+                "set_round_timeout": {
                     "custom_action_param": {
-                        "total_timeout": "{单轮战斗超时（毫秒）}",
-                        "target_node": ["def_map1_again","def_map1_again_template"]
-                    }
-                },
-                "expulsion_auto_battle": {
-                    "custom_action_param": {
-                        "total_timeout": "{单轮战斗超时（毫秒）}",
-                        "target_node": ["expulsion_again","expulsion_again_template"]
+                        "round_timeout_ms": "{单轮战斗超时（毫秒）}"
                     }
                 }
             },
             "doc": "设置皎皎币单轮战斗的超时时间，单位为毫秒"
         },
-        "单轮战斗超时（每一轮）":{
+        "自动E周期": {
             "field": [
-                "单轮战斗超时（每一轮）（毫秒）"
+                "自动E周期（毫秒）"
             ],
             "type": [
                 "int"
             ],
             "default": [
-                "420000"
+                "5000"
             ],
             "pipeline_override": {
-                "JJcoin_taskcheck": {
+                "set_auto_e_interval": {
                     "custom_action_param": {
-                        "check_interval": 5000,
-                        "total_timeout": "{单轮战斗超时（每一轮）（毫秒）}",
-                        "target_node": ["JJcoin_finish"],
-                        "post_rounds":["JJcoin_continue_1"]
+                        "auto_e_interval_ms": "{自动E周期（毫秒）}"
                     }
                 }
             },
-            "doc": "设置皎皎币整体任务的超时时间，单位为毫秒"
+            "doc": "设置自动战斗的 E 键触发周期（毫秒）"
         }
 
     }

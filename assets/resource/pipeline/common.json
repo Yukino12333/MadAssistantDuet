@@ -1,21 +1,93 @@
 {
-    "set_dodge_key": {
+    "common_entry": {
         "recognition": "DirectHit",
-        "action": "Custom",
-        "custom_action": "SetDodgeKey",
-        "custom_action_param": {
-            "dodge_key": 2
-        },
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 1000,
+        "next": ["common_giveup", "common_giveup_template", "common_entry"]
+    },
+    "common_giveup": {
+        "recognition": "OCR",
+        "expected": ["放弃挑战"],
+        "roi": [1152, 673, 58, 15],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["common_confirm"]
+    },
+    "common_giveup_template": {
+        "recognition": "TemplateMatch",
+        "template": "common/放弃挑战.png",
+        "roi": [1157, 626, 48, 49],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["common_confirm"]
+    },
+    "common_confirm": {
+        "recognition": "OCR",
+        "expected": ["确定"],
+        "roi": [737, 391, 39, 23],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["common_again", "common_again_template", "common_confirm"]
+    },
+    "common_again": {
+        "recognition": "OCR",
+        "expected": "再次进行",
+        "roi": [882, 620, 79, 30],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["common_start", "common_again"]
+    },
+    "common_again_template": {
+        "recognition": "TemplateMatch",
+        "template": "common/再次进行.png",
+        "roi": [819, 619, 35, 35],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": ["common_start", "common_again_template"]
+    },
+    "common_start": {
+        "recognition": "OCR",
+        "expected": "挑战",
+        "roi": [719, 467, 78, 30],
+        "action": "Click",
+        "next": ["common_in_battle", "common_in_battle_template", "common_start"]
+    },
+    "common_in_battle": {
+        "recognition": "OCR",
+        "expected": ["前往目标点", "目标点", "驱离所有敌人"],
+        "roi": [1100, 0, 180, 178],
+        "post_delay": 2000,
+        "action": "DoNothing",
         "next": []
     },
-    "set_auto_battle_mode":{
+    "common_in_battle_template": {
+        "recognition": "TemplateMatch",
+        "template": "common/游戏内退出.png",
+        "roi": [0, 0, 131, 133],
+        "post_delay": 2000,
+        "action": "DoNothing",
+        "next": []
+    },
+    "common_auto_battle": {
         "recognition": "DirectHit",
         "action": "Custom",
-        "custom_action":"SetAutoBattleMode",
-        "custom_action_param":{
-            "auto_battle_mode": 1
+        "custom_action": "AutoBattle",
+        "custom_action_param": {
+            "target_node": ["common_again","common_again_template"] 
         },
+        "on_error": ["common_entry"],
+        "next": ["common_again","common_again_template"]
+    },
+    "common_multi_rounds_battle": {
+        "recognition": "DirectHit",
+        "action": "Custom",
+        "custom_action": "MultiRoundsAutoBattle",
+        "custom_action_param": {
+            "target_node": ["common_battle_finish"],
+            "post_rounds": []
+        },
+        "on_error": [],
         "next": []
-
     }
 }

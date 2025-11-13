@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 @AgentServer.custom_action("ResetCharacterPosition")
 class ResetCharacterPosition(CustomAction):
     """
-    测试版：通过 Context.run_task 同步执行节点 "Reset_Entry"
+    通过 Context.run_task 同步执行节点 "Reset_Entry"
 
     参数（可选）：
     {
@@ -82,7 +82,7 @@ class AutoBattle(CustomAction):
         context: Context,
         argv: CustomAction.RunArg,
     ) -> bool:
-        # 从参数中获取配置（仅需要: check_interval(float), total_timeout(float), target_node(list[str])）
+        # 从参数中获取配置（仅需要: check_interval(float), round_timeout(float), target_node(list[str])）
         # 支持 JSON 字符串或字典，单位按秒传入，这里转换为毫秒以复用原实现
         try:
             if isinstance(argv.custom_action_param, str):
@@ -97,11 +97,12 @@ class AutoBattle(CustomAction):
             logger.error(f"  参数内容: {argv.custom_action_param}")
             return False
 
-        # 允许浮点数（秒），内部转换为毫秒兼容现有逻辑
-        check_interval = float(params.get("check_interval", 5000))
-        total_timeout = float(params.get("total_timeout", 180000))
+        # 从全局配置获取周期与超时（毫秒）
+        check_interval = float(GAME_CONFIG.get("auto_e_interval_ms", 5000))
+        round_timeout = float(GAME_CONFIG.get("round_timeout_ms", 180000))
 
 
+        # 仅从参数中读取目标节点
         target_nodes = params.get("target_node", ["again_for_win"])  # 要检测的目标节点（支持数组）
         if isinstance(target_nodes, str):
             target_nodes = [target_nodes]
@@ -114,7 +115,7 @@ class AutoBattle(CustomAction):
         
         logger.info("=" * 50)
         logger.info("[AutoBattle] 开始战斗循环检测")
-        logger.info(f"  检测间隔: {check_interval}ms, 总超时: {total_timeout}ms")
+        logger.info(f"  检测间隔: {check_interval}ms, 单轮超时: {round_timeout}ms")
         # logger.info(f"  目标节点: {target_nodes}, 中断节点: {interrupt_node}")
         
         try:
@@ -130,13 +131,13 @@ class AutoBattle(CustomAction):
                 elapsed = (time.time() - start_time) * 1000  # 已经过的时间（毫秒）
                 
                 # 检查是否超时
-                if elapsed >= total_timeout:
-                    logger.warning(f"[AutoBattle] 超时 {total_timeout}ms，跳转到 on_error")
+                if elapsed >= round_timeout:
+                    logger.warning(f"[AutoBattle] 超时 {round_timeout}ms，跳转到 on_error")
                     logger.info(f"  总循环次数: {loop_count}")
                     return False
                 
                 # 尝试检测目标节点
-                logger.info(f"[AutoBattle] 第 {loop_count} 次检测 {target_nodes}... (已用时: {int(elapsed)}ms / {total_timeout}ms)")
+                logger.info(f"[AutoBattle] 第 {loop_count} 次检测 {target_nodes}... (已用时: {int(elapsed)}ms / {round_timeout}ms)")
                 
                 # 获取最新截图
                 sync_job = context.tasker.controller.post_screencap()
@@ -209,7 +210,7 @@ class MultiRoundsAutoBattle(CustomAction):
         context: Context,
         argv: CustomAction.RunArg,
     ) -> bool:
-        # 从参数中获取配置
+        # 从参数中获取配置（仅 target_node 与 post_rounds）
         try:
             if isinstance(argv.custom_action_param, str):
                 params = json.loads(argv.custom_action_param)
@@ -231,7 +232,8 @@ class MultiRoundsAutoBattle(CustomAction):
         if total_rounds < 1:
             total_rounds = 1
 
-        round_timeout = params.get("round_timeout", 420000)  # 每轮超时 420s
+        # 每轮超时优先使用全局配置，否则回退到总超时或默认
+        round_timeout = GAME_CONFIG.get("round_timeout_ms", 420000)
         post_rounds = params.get("post_rounds", [])  # 每轮后的处理节点列表
         
         logger.info("=" * 50)
@@ -261,6 +263,7 @@ class MultiRoundsAutoBattle(CustomAction):
                     logger.warning(f"[MultiRoundsAutoBattle] 执行 post_round '{post_node}' 时出错: {e}")
 
         # 最后一轮（或仅有的一轮）
+        logger.info(f"[MultiRoundsAutoBattle] 第 {total_rounds}/{total_rounds} 轮战斗开始")
         last_result = auto_battle_action.run(context, argv)
         if not last_result:
             logger.error(f"[MultiRoundsAutoBattle] 最后一轮战斗失败或超时")
