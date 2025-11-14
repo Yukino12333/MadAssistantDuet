@@ -1,0 +1,746 @@
+{
+    "$__mpe_config_刷线索.json": {
+        "$__mpe_code": {
+            "prefix": "01",
+            "filename": "刷线索.json",
+            "version": "v0.5.6_beta5"
+        }
+    },
+    "01_打开菜单": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "ClickKey",
+            "param": {
+                "key": [
+                    27
+                ]
+            }
+        },
+        "pre_delay": 1000,
+        "post_delay": 2000,
+        "$__mpe_code": {
+            "position": {
+                "x": 303,
+                "y": -321
+            }
+        },
+        "next": [
+            "01_点击历练"
+        ]
+    },
+    "01_点击历练": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    113,
+                    359,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 1500,
+        "$__mpe_code": {
+            "position": {
+                "x": 744,
+                "y": -87
+            }
+        },
+        "next": [
+            "01_点击委托"
+        ]
+    },
+    "01_点击委托": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    384,
+                    21,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 2000,
+        "$__mpe_code": {
+            "position": {
+                "x": 1168,
+                "y": -288
+            }
+        },
+        "next": [
+            "01_点击探险"
+        ]
+    },
+    "01_点击探险": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    708,
+                    385,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 1500,
+        "$__mpe_code": {
+            "position": {
+                "x": 1669,
+                "y": -342
+            }
+        },
+        "next": [
+            "01_点击10级"
+        ]
+    },
+    "01_点击10级": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    137,
+                    162,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 600,
+        "$__mpe_code": {
+            "position": {
+                "x": 2074,
+                "y": -412
+            }
+        },
+        "next": [
+            "01_点击火本"
+        ]
+    },
+    "01_点击火本": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    940,
+                    601,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 600,
+        "$__mpe_code": {
+            "position": {
+                "x": 2426,
+                "y": -521
+            }
+        },
+        "next": [
+            "01_开始挑战"
+        ]
+    },
+    "01_开始挑战": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    1117,
+                    651,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 400,
+        "$__mpe_code": {
+            "position": {
+                "x": 2856,
+                "y": -609
+            }
+        },
+        "next": [
+            "01_选择书"
+        ]
+    },
+    "01_选择书": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    789,
+                    486,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 4622,
+                "y": -111
+            }
+        },
+        "next": [
+            "01_确认是否进入地图"
+        ]
+    },
+    "01_确认是否进入地图": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    1166,
+                    0,
+                    114,
+                    131
+                ],
+                "expected": [
+                    "探险"
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "pre_delay": 3000,
+        "$__mpe_code": {
+            "position": {
+                "x": 4861,
+                "y": -117
+            }
+        },
+        "next": [
+            "01_地图是否正确_顺",
+            "01_地图是否正确_逆"
+        ]
+    },
+    "01_退出": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "ClickKey",
+            "param": {
+                "key": [
+                    27
+                ]
+            }
+        },
+        "pre_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 4199,
+                "y": 1072
+            }
+        },
+        "next": [
+            "01_点击退出"
+        ]
+    },
+    "01_点击退出": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    1167,
+                    652,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 3679,
+                "y": 554
+            }
+        },
+        "next": [
+            "01_确认"
+        ]
+    },
+    "01_确认": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    764,
+                    412,
+                    1,
+                    1
+                ]
+            }
+        },
+        "pre_delay": 400,
+        "$__mpe_code": {
+            "position": {
+                "x": 3961,
+                "y": 442
+            }
+        },
+        "next": [
+            "01_再次进行"
+        ]
+    },
+    "01_再次进行": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    831,
+                    575,
+                    187,
+                    126
+                ],
+                "expected": [
+                    "再次进行"
+                ]
+            }
+        },
+        "action": {
+            "type": "Click",
+            "param": {}
+        },
+        "pre_delay": 400,
+        "$__mpe_code": {
+            "position": {
+                "x": 4341,
+                "y": 431
+            }
+        },
+        "next": [
+            "01_选择书"
+        ]
+    },
+    "01_确认是否在副本内": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "roi": [
+                    1169,
+                    0,
+                    111,
+                    133
+                ],
+                "expected": [
+                    "探险"
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "timeout": 5000,
+        "post_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 596,
+                "y": 529
+            }
+        },
+        "next": [
+            "01_退出"
+        ]
+    },
+    "01_确认是否在大世界": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [
+                    927,
+                    11,
+                    83,
+                    43
+                ],
+                "lower": [
+                    [
+                        250,
+                        250,
+                        250
+                    ]
+                ],
+                "upper": [
+                    [
+                        255,
+                        255,
+                        255
+                    ]
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": -31,
+                "y": -329
+            }
+        },
+        "next": [
+            "01_打开菜单"
+        ]
+    },
+    "01_确认是否打开菜单": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "活动"
+                ],
+                "roi": [
+                    292,
+                    182,
+                    59,
+                    39
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "timeout": 5000,
+        "post_delay": 1500,
+        "$__mpe_code": {
+            "position": {
+                "x": 265,
+                "y": 69
+            }
+        },
+        "next": [
+            "01_点击历练"
+        ]
+    },
+    "01_开始": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "post_delay": 2000,
+        "$__mpe_code": {
+            "position": {
+                "x": -1033,
+                "y": 180
+            }
+        },
+        "next": [
+            "01_聚焦"
+        ]
+    },
+    "01_等待": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "pre_delay": 5000,
+        "$__mpe_code": {
+            "position": {
+                "x": 5794,
+                "y": -149
+            }
+        },
+        "next": [
+            "01_按住W"
+        ]
+    },
+    "01_按住W": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 87,
+                "duration": 9600
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 6308,
+                "y": -187
+            }
+        },
+        "next": [
+            "01_按住A"
+        ]
+    },
+    "01_聚焦": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {}
+        },
+        "post_delay": 2000,
+        "$__mpe_code": {
+            "position": {
+                "x": -562,
+                "y": 217
+            }
+        },
+        "next": [
+            "01_确认是否在大世界",
+            "01_确认是否打开菜单",
+            "01_确认是否在副本内"
+        ]
+    },
+    "01_地图是否正确_顺": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [
+                    936,
+                    112,
+                    16,
+                    15
+                ],
+                "lower": [
+                    [
+                        235,
+                        206,
+                        109
+                    ]
+                ],
+                "upper": [
+                    [
+                        242,
+                        235,
+                        208
+                    ]
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 5460,
+                "y": -129
+            }
+        },
+        "next": [
+            "01_等待"
+        ]
+    },
+    "01_按住A": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 65,
+                "duration": 510
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 6577,
+                "y": -175
+            }
+        },
+        "next": [
+            "01_点击W"
+        ]
+    },
+    "01_点击W": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "ClickKey",
+            "param": {
+                "key": [
+                    87
+                ]
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 6838,
+                "y": -147
+            }
+        },
+        "next": [
+            "01_识别操作按钮"
+        ]
+    },
+    "01_地图是否正确_逆": {
+        "recognition": {
+            "type": "ColorMatch",
+            "param": {
+                "roi": [
+                    936,
+                    112,
+                    16,
+                    15
+                ],
+                "lower": [
+                    [
+                        235,
+                        206,
+                        109
+                    ]
+                ],
+                "upper": [
+                    [
+                        242,
+                        235,
+                        208
+                    ]
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "inverse": true,
+        "$__mpe_code": {
+            "position": {
+                "x": 5465,
+                "y": 102
+            }
+        },
+        "next": [
+            "01_退出"
+        ]
+    },
+    "01_识别操作按钮": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "操作"
+                ],
+                "roi": [
+                    763,
+                    298,
+                    142,
+                    124
+                ]
+            }
+        },
+        "action": {
+            "type": "ClickKey",
+            "param": {
+                "key": [
+                    70
+                ]
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 7382,
+                "y": -326
+            }
+        },
+        "next": [
+            "01_巧手破解机关"
+        ]
+    },
+    "01_巧手破解机关": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 70,
+                "duration": 1000
+            }
+        },
+        "post_delay": 2000,
+        "$__mpe_code": {
+            "position": {
+                "x": 7617,
+                "y": -312
+            }
+        },
+        "next": [
+            "01_结束"
+        ]
+    },
+    "01_结束": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "StopTask",
+            "param": {}
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 8697,
+                "y": -295
+            }
+        }
+    }
+}
