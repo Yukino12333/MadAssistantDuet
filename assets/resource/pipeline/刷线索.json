@@ -3,7 +3,7 @@
         "$__mpe_code": {
             "prefix": "01",
             "filename": "刷线索.json",
-            "version": "v0.5.6_beta5"
+            "version": "v0.7.1_beta_1"
         }
     },
     "01_打开菜单": {
@@ -199,14 +199,9 @@
             "param": {}
         },
         "action": {
-            "type": "Click",
+            "type": "Custom",
             "param": {
-                "target": [
-                    789,
-                    486,
-                    1,
-                    1
-                ]
+                "custom_action": "SelectBookByOption"
             }
         },
         "pre_delay": 1000,
@@ -239,7 +234,7 @@
             "type": "DoNothing",
             "param": {}
         },
-        "pre_delay": 3000,
+        "pre_delay": 4000,
         "$__mpe_code": {
             "position": {
                 "x": 4861,
@@ -490,7 +485,7 @@
             "type": "DoNothing",
             "param": {}
         },
-        "pre_delay": 5000,
+        "pre_delay": 4000,
         "$__mpe_code": {
             "position": {
                 "x": 5794,
@@ -542,7 +537,8 @@
         "next": [
             "01_确认是否在大世界",
             "01_确认是否打开菜单",
-            "01_确认是否在副本内"
+            "01_确认是否在副本内",
+            "01_检查委托详情"
         ]
     },
     "01_地图是否正确_顺": {
@@ -627,7 +623,7 @@
             }
         },
         "next": [
-            "01_识别操作按钮"
+            "01_调整方向_1_S"
         ]
     },
     "01_地图是否正确_逆": {
@@ -696,12 +692,15 @@
         },
         "$__mpe_code": {
             "position": {
-                "x": 7382,
-                "y": -326
+                "x": 9774,
+                "y": -126
             }
         },
         "next": [
             "01_巧手破解机关"
+        ],
+        "on_error": [
+            "01_退出"
         ]
     },
     "01_巧手破解机关": {
@@ -719,28 +718,435 @@
         "post_delay": 2000,
         "$__mpe_code": {
             "position": {
-                "x": 7617,
-                "y": -312
+                "x": 10086,
+                "y": -131
             }
         },
         "next": [
-            "01_结束"
+            "01_使用技能_E"
         ]
     },
-    "01_结束": {
+    "01_调整方向_1_S": {
         "recognition": {
             "type": "DirectHit",
             "param": {}
         },
         "action": {
-            "type": "StopTask",
+            "type": "LongPressKey",
+            "param": {
+                "key": 83,
+                "duration": 1000
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 7379,
+                "y": -145
+            }
+        },
+        "next": [
+            "01_调整方向_2_click"
+        ]
+    },
+    "01_调整方向_2_click": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {}
+        },
+        "post_delay": 1500,
+        "$__mpe_code": {
+            "position": {
+                "x": 7722,
+                "y": -113
+            }
+        },
+        "next": [
+            "01_调整方向_3_click"
+        ]
+    },
+    "01_调整方向_3_click": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {}
+        },
+        "post_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 8001,
+                "y": -99
+            }
+        },
+        "next": [
+            "01_调整方向_4_A"
+        ]
+    },
+    "01_调整方向_4_A": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "duration": 700,
+                "key": 65
+            }
+        },
+        "post_delay": 300,
+        "$__mpe_code": {
+            "position": {
+                "x": 8295,
+                "y": -116
+            }
+        },
+        "next": [
+            "01_调整方向_5_click"
+        ]
+    },
+    "01_检查委托详情": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "委托详情"
+                ],
+                "roi": [
+                    0,
+                    425,
+                    232,
+                    140
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "timeout": 5000,
+        "post_delay": 1000,
+        "$__mpe_code": {
+            "position": {
+                "x": 1988,
+                "y": 377
+            }
+        },
+        "next": [
+            "01_点击退出"
+        ]
+    },
+    "01_调整方向_5_click": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {}
+        },
+        "post_delay": 1500,
+        "$__mpe_code": {
+            "position": {
+                "x": 8592,
+                "y": -82
+            }
+        },
+        "next": [
+            "01_前往点位_S"
+        ]
+    },
+    "01_前往点位_S": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 83,
+                "duration": 2800
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 8867,
+                "y": -85
+            }
+        },
+        "next": [
+            "01_前往点位_D"
+        ]
+    },
+    "01_前往点位_D": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 68,
+                "duration": 400
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 9117,
+                "y": -73
+            }
+        },
+        "next": [
+            "01_前往点位_W"
+        ]
+    },
+    "01_前往点位_W": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 87,
+                "duration": 1000
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 9388,
+                "y": -67
+            }
+        },
+        "next": [
+            "01_识别操作按钮"
+        ]
+    },
+    "01_使用技能_E": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "LongPressKey",
+            "param": {
+                "key": 69,
+                "duration": 1000
+            }
+        },
+        "pre_delay": 4000,
+        "post_delay": 400,
+        "$__mpe_code": {
+            "position": {
+                "x": 10395,
+                "y": -56
+            }
+        },
+        "next": [
+            "01_查询是否完成一波_顺",
+            "01_查询是否完成一波_逆"
+        ]
+    },
+    "01_查询是否完成一波_顺": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "继续挑战"
+                ],
+                "roi": [
+                    775,
+                    436,
+                    173,
+                    128
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "timeout": 500,
+        "$__mpe_code": {
+            "position": {
+                "x": 10699,
+                "y": -259
+            }
+        },
+        "next": [
+            "01_检查波次_顺",
+            "01_检查波次_逆"
+        ]
+    },
+    "01_检查波次_顺": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "^{target_wave_regex}$"
+                ],
+                "only_rec": true,
+                "roi": [
+                    265,
+                    254,
+                    44,
+                    50
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
             "param": {}
         },
         "$__mpe_code": {
             "position": {
-                "x": 8697,
-                "y": -295
+                "x": 11044,
+                "y": -51
             }
-        }
+        },
+        "next": [
+            "01_撤退"
+        ]
+    },
+    "01_撤退": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    440,
+                    505,
+                    1,
+                    1
+                ]
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 11319,
+                "y": -45
+            }
+        },
+        "next": [
+            "01_再次进行"
+        ]
+    },
+    "01_检查波次_逆": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "^{target_wave_regex}$"
+                ],
+                "only_rec": true,
+                "roi": [
+                    265,
+                    254,
+                    44,
+                    50
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "inverse": true,
+        "$__mpe_code": {
+            "position": {
+                "x": 11033,
+                "y": 175
+            }
+        },
+        "next": [
+            "01_继续"
+        ]
+    },
+    "01_继续": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Click",
+            "param": {
+                "target": [
+                    846,
+                    500,
+                    1,
+                    1
+                ]
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 11316,
+                "y": 235
+            }
+        },
+        "next": [
+            "01_继续_选书"
+        ]
+    },
+    "01_继续_选书": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "Custom",
+            "param": {
+                "custom_action": "SelectBookByOption"
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 11581,
+                "y": 251
+            }
+        },
+        "next": [
+            "01_使用技能_E"
+        ]
+    },
+    "01_查询是否完成一波_逆": {
+        "recognition": {
+            "type": "OCR",
+            "param": {
+                "expected": [
+                    "继续挑战"
+                ],
+                "roi": [
+                    775,
+                    436,
+                    173,
+                    128
+                ]
+            }
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "timeout": 500,
+        "inverse": true,
+        "$__mpe_code": {
+            "position": {
+                "x": 10613,
+                "y": -515
+            }
+        },
+        "next": [
+            "01_使用技能_E"
+        ]
     }
 }

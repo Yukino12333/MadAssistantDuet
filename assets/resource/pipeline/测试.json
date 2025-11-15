@@ -1,0 +1,52 @@
+{
+    "$__mpe_config_测试": {
+        "$__mpe_code": {
+            "prefix": "测试_",
+            "filename": "测试",
+            "version": "v0.5.6_beta5"
+        }
+    },
+    "测试__开始": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "DoNothing",
+            "param": {}
+        },
+        "post_delay": 3000,
+        "$__mpe_code": {
+            "position": {
+                "x": 7113,
+                "y": -196
+            }
+        },
+        "next": [
+            "测试__移动视角"
+        ]
+    },
+    "测试__移动视角": {
+        "recognition": {
+            "type": "DirectHit",
+            "param": {}
+        },
+        "action": {
+            "type": "TouchMove",
+            "param": {
+                "contact": 0,
+                "target": [
+                    500,
+                    300
+                ],
+                "pressure": 0
+            }
+        },
+        "$__mpe_code": {
+            "position": {
+                "x": 7635,
+                "y": -209
+            }
+        }
+    }
+}

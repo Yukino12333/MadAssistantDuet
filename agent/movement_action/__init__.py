@@ -14,4 +14,7 @@ __all__ = [
     'PressMultipleKeys',
     'RunWithJump',
     'JsonActionSequence',
+    'SelectBookByOption',
+    'SetTargetWave', 
+    'SetBookOption',
 ]
