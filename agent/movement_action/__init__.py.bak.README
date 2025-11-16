@@ -1,2 +1,0 @@
-This file used to export PostMessageInputHelper which is now removed.
-Actions now use Maa controller API directly (post_key_down/up/click_key).
