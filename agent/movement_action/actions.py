@@ -29,8 +29,8 @@ class LongPressKey(CustomAction):
         context: Context,
         argv: CustomAction.RunArg,
     ) -> bool:
-        # 解析参数
         try:
+            # 解析参数
             if isinstance(argv.custom_action_param, str):
                 params = json.loads(argv.custom_action_param)
             elif isinstance(argv.custom_action_param, dict):
